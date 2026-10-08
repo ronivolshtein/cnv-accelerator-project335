@@ -28,7 +28,7 @@ slowest pipeline stage and widening it.
 All performance results in this repository come from **cycle accurate RTL
 simulation (PyVerilator RTLSIM)** and **Vivado Out of Context synthesis**.
 
-Measurement of a CPU baseline against simulated FPGA figures. 
+Measurement of a single thread CPU baseline is compared with simulated FPGA performance. 
 
 Power figures are estimates. They come from Vivado's
 `report_power` on the placed and routed out of context design - the accelerator
@@ -62,7 +62,7 @@ timing margin from +0.340 ns to +0.082 ns. C keeps roughly four times the slack
 for almost the same performance.
 
 **Zero DSP slices are used in any configuration.** With 1 bit weights and
-activations the multiply accumulate is replaced into XNOR plus popcount, which
+activations the multiply accumulate operation is implemented using XNOR and popcount operations, which
 maps onto LUTs rather than DSP blocks.
 
 ### Power and energy
@@ -133,13 +133,13 @@ install will fail.
 | Requirement | Notes |
 |---|---|
 | Linux host with `bash` | WSL2 on Windows also works |
-| Docker, usable without `sudo` | FINN only supports Docker based execution |
-| Vivado + Vitis HLS **2022.2** | Installed on the host, not inside the container |
+| Docker, usable without `sudo` | This project was developed and tested using FINN’s docker based workflow |
+| Vivado + Vitis HLS 2022.2 | Installed on the host, not inside the container |
 | ~8 GB RAM | Minimum for Zynq class targets |
 | Tens of GB of free disk | FINN build directories are large |
 
 No GPU is required - the container we used had none, and everything here runs on
-CPU. No PYNQ-Z1 board is required either.
+CPU. No PYNQ-Z1 board is required either. A physical board is required only for hardware deployment.
 
 ### What you do *not* need to install
 
@@ -169,7 +169,7 @@ export FINN_XILINX_VERSION=2022.2
 # 2. Get FINN, at the version this project used
 git clone https://github.com/Xilinx/finn
 cd finn
-git checkout v0.10
+git checkout v0.10.1
 
 # 3. Start the notebook server inside the container
 bash ./run-docker.sh notebook
@@ -217,7 +217,7 @@ hardware/    FINN generated deployment packages and Vivado block diagrams
 configs/     The folding parameters for configurations A–D
 ```
 
-Appendix A of the project book lists thirteen notebooks; eight are here. The rest
+Appendix A of the project book lists thirteen notebooks in total, eight are here. The rest
 are the official FINN tutorial notebooks - `0_how_to_work_with_onnx`,
 `1_brevitas_network_import_via_QONNX`, the cybersecurity MLP series and the FINN
 end to end examples - which we worked through while learning the framework. They
@@ -264,7 +264,7 @@ describes the tutorial's model, not our measurements.
 | Vivado / Vitis HLS | 2022.2 |
 | Python | 3.10 |
 | PyTorch | 1.13.1+cu116 |
-| Brevitas | as pinned by FINN v0.10, installed from `deps/brevitas` |
+| Brevitas | v0.10.0, pinned by FINN and installed from deps/brevitas |
 | Target board | AMD/Xilinx PYNQ-Z1 (XC7Z020-CLG400) |
 | Clock target | 100 MHz (10 ns) |
 
